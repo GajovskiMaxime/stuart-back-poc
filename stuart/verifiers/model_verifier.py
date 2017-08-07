@@ -14,21 +14,21 @@ class ModelVerifier(object):
         self._table = table
 
     def verify_mandatory_fields(self, **args):
-        mandatory_fields = self._table.mandatory_fields()
-        for k_column, v_column in mandatory_fields.items():
-            if k_column not in args:
+        mandatory_fields = self._table.properties().get_mandatory_fields()
+        for item in mandatory_fields:
+            if item not in args:
                 raise AttributeNotFoundException(
-                    needed_attributes=k_column,
+                    needed_attributes=item,
                     table=self._table)
 
     def verify_empty_fields(self, **args):
-        mandatory_fields = self._table.mandatory_fields()
-        for k_column, v_column in mandatory_fields.items():
-                if v_column['type_'] == String:
-                    if k_column in args and not args[k_column].strip():
+        mandatory_fields = self._table.properties().get_mandatory_fields()
+        for item in mandatory_fields:
+                if self._table.properties().get_column(item)['type_'] == String:
+                    if item in args and not args[item].strip():
                         raise EmptyAttributeException(
                             table=self._table,
-                            attribute=k_column)
+                            attribute=item)
 
     def verify_extra_fields(self, **args):
         for k_column, v_column in args.items():
@@ -43,6 +43,7 @@ class ModelVerifier(object):
 
     def verify_args(self, **args):
         try:
+            # current_app.logger.info(self._table.properties().get_properties())
             self.verify_mandatory_fields(
                 **args)
 

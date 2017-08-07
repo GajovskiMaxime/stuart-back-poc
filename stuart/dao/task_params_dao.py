@@ -1,23 +1,24 @@
 from stuart.dao.abstract_generic_dao import AbstractGenericDAO
-from stuart.models.module import Module
+from stuart.models.task_params import TaskParams
 
 
-class ModuleDAO(AbstractGenericDAO):
+class TaskParamsDAO(AbstractGenericDAO):
 
     def __init__(self):
-        super(ModuleDAO, self).__init__(table=Module)
+        super(TaskParamsDAO, self).__init__(
+            table=TaskParams)
 
     def create(self, session, model):
-        return super(ModuleDAO, self).create(
+        return super(TaskParamsDAO, self).create(
             session=session,
             model=model)
 
     def read_all(self, session, filters):
-        return super(ModuleDAO, self).read_all(
+        return super(TaskParamsDAO, self).read_all(
             session=session,
             filters=filters)
 
     def delete(self, session, filters):
-        return super(ModuleDAO, self).delete(
+        return super(TaskParamsDAO, self).delete(
             session=session,
             filters=filters)

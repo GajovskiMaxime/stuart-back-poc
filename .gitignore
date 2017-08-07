@@ -8,5 +8,9 @@ __pycache__/
 ##Idea
 .idea/
 
+#Database
+*.db-journal
+*.db
+
 #Logs
 *.log

@@ -34,7 +34,8 @@ class ActionProperties(AbstractModelProperties):
             },
             'is_preset': {
                 'type_': Boolean,
-                'nullable': False
+                'nullable': False,
+                'default': False
             }
         },
         'relationships': {

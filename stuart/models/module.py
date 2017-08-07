@@ -1,3 +1,5 @@
+from sqlalchemy import UniqueConstraint
+
 from stuart.models.abstract_model import AbstractModel
 from stuart.database.database import db
 from stuart.models_properties.module_properties import ModuleProperties
@@ -26,10 +28,13 @@ class Module(db.Model, AbstractModel):
 
     # --------- Relationships ---------
 
-    actions = db.relationship(**_properties.get_relation('actions'))
+    action_list = db.relationship(**_properties.get_relation('actions'))
 
     # --------- Constraints ---------
-    # TODO : Needed constraints
+
+    UniqueConstraint(command, label)
+
+    # --------- Constructor ---------
 
     def __init__(self, label, command, is_preset=False):
         super(Module, self).__init__()
@@ -43,7 +48,7 @@ class Module(db.Model, AbstractModel):
     @property
     def serialize(self):
         lazy_dict = self.serialize_lazy
-        # lazy_dict['actions'] = list_to_json(self.actions)
+        lazy_dict['action_list'] = list_to_json(self.action_list)
         return lazy_dict
 
     @property

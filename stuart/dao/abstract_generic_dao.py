@@ -1,6 +1,10 @@
 from flask import current_app
+from sqlalchemy import Integer, String, Boolean
 
+from stuart.exceptions.database.empty_table_exception import EmptyTableException
+from stuart.exceptions.database.filter_exception import FilterException
 from stuart.exceptions.database.object_not_found_exception import ObjectNotFoundException
+from stuart.exceptions.database.preset_exception import PresetException
 
 
 class AbstractGenericDAO(object):
@@ -13,20 +17,58 @@ class AbstractGenericDAO(object):
         session.add(model)
         return model
 
-    def read_by_id(self, session, object_id):
-        return AbstractGenericDAO.__read_by_id(
-            session=session,
-            table=self._table,
-            object_id=object_id)
+    def __get_objects_with_filters(self, query, filters):
+        try:
 
-    @staticmethod
-    def __read_by_id(session, table, object_id):
-        object_to_get = session.query(table).get(object_id)
-        if object_to_get is None:
-            raise ObjectNotFoundException(
-                object_id=object_id,
-                table=table)
-        return object_to_get
+            for k, v in filters.items():
+                if not v or v is None:
+                    query = query.filter(self._table.__getattribute__(self._table, k).is_(None))
+
+                elif self._table.properties().get_column(k)['type_'] is Boolean:
+                    v = True if v.lower() == 'true' else False
+                    query = query.filter(self._table.__getattribute__(self._table, k).is_(v))
+
+                elif self._table.properties().get_column(k)['type_'] is String:
+                    query = query.filter(self._table.__getattribute__(self._table, k).ilike('%' + v + '%'))
+
+                if self._table.properties().get_column(k)['type_'] is Integer:
+                    query = query.filter(self._table.__getattribute__(self._table, k) == int(v))
+        except ValueError:
+            raise FilterException(
+                filters=filters)
+        return query.all()
+
+    def read_all(self, session, filters):
+        objects = self.__get_objects_with_filters(
+            query=session.query(self._table),
+            filters=filters)
+
+        if not objects:
+            if len(filters) != 0:
+                raise ObjectNotFoundException(
+                    filters=filters,
+                    table=self._table)
+            raise EmptyTableException(
+                table=self._table)
+
+        return objects
+
+    def delete(self, session, filters):
+        try:
+            object_from_db = self.read_all(
+                session=session,
+                filters=filters)[0]
+
+            if object_from_db.is_preset:
+                raise PresetException(
+                    object_id=filters['id'],
+                    table=self._table,
+                    action='delete')
+
+            session.delete(object_from_db)
+        except ObjectNotFoundException:
+            raise
+        return filters['id']
 
     @property
     def table(self):

@@ -1,3 +1,5 @@
+from sqlalchemy import UniqueConstraint
+
 from stuart.database.database import db
 
 from stuart.models.abstract_model import AbstractModel
@@ -35,7 +37,10 @@ class Action(db.Model, AbstractModel):
         **_properties.get_column('is_preset'))
 
     # --------- Constraints ---------
-    # TODO : Needed constraints
+
+    UniqueConstraint(module_id, command)
+
+    # --------- Constructor ---------
 
     def __init__(self, module_id, label, command,
                  category='', is_preset=False, is_tested=False):

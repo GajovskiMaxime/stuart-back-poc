@@ -12,7 +12,12 @@ class ActionDAO(AbstractGenericDAO):
             session=session,
             model=model)
 
-    def read_by_id(self, session, object_id):
-        return super(ActionDAO, self).read_by_id(
+    def read_all(self, session, filters):
+        return super(ActionDAO, self).read_all(
             session=session,
-            object_id=object_id)
+            filters=filters)
+
+    def delete(self, session, filters):
+        return super(ActionDAO, self).delete(
+            session=session,
+            filters=filters)

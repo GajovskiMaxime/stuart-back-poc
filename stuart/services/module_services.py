@@ -14,6 +14,10 @@ class ModuleService(AbstractGenericService):
         return super(ModuleService, self).\
             create_with_dict(**args)
 
-    def read_by_id(self, object_id):
+    def read_all(self, filters):
         return super(ModuleService, self).\
-            read_by_id(object_id=object_id)
+            read_all(filters=filters)
+
+    def delete(self, filters):
+        return super(ModuleService, self).\
+            delete(filters=filters)

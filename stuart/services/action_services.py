@@ -2,6 +2,7 @@ from stuart.dao.action_dao import ActionDAO
 from stuart.services.abstract_generic_services import AbstractGenericService
 from stuart.verifiers.action_verifier import ActionVerifier
 
+
 class ActionService(AbstractGenericService):
 
     def __init__(self):
@@ -13,6 +14,10 @@ class ActionService(AbstractGenericService):
         return super(ActionService, self). \
             create_with_dict(**args)
 
-    def read_by_id(self, object_id):
-        return super(ActionService, self). \
-            read_by_id(object_id=object_id)
+    def read_all(self, filters):
+        return super(ActionService, self).\
+            read_all(filters=filters)
+
+    def delete(self, filters):
+        return super(ActionService, self).\
+            delete(filters=filters)

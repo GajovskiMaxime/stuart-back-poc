@@ -15,19 +15,6 @@ class AbstractModel(object):
     def table_name(cls):
         return cls.__tablename__.lower()
 
-    @classmethod
-    def mandatory_fields(cls):
-        columns = cls.properties().get_columns()
-        columns.pop('id', None)
-
-        for k_column, v_column in columns.items():
-            if 'nullable' not in v_column \
-                    or v_column['nullable'] is True\
-                    or 'default' in v_column:
-                columns.pop(k_column, None)
-        return columns
-
-
     @property
     def serialize_lazy(self):
         lazy_dict = {}

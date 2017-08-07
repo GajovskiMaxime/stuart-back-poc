@@ -1,9 +1,9 @@
-from flask import current_app
+from sqlalchemy.exc import OperationalError
 
 from stuart.database.database import get_session
 from stuart.exceptions.attribute.attribute_exception import AttributeException
 from stuart.exceptions.dao_exception import DAOException
-from stuart.exceptions.format.id_is_not_an_integer_exception import IdIsNotAnIntegerException
+from stuart.exceptions.database.database_locked_exception import LockedDatabaseException
 
 
 class AbstractGenericService(object):
@@ -17,72 +17,53 @@ class AbstractGenericService(object):
         return self._dao
 
     def create_with_dict(self, args):
-        return AbstractGenericService.__create_with_dict(
-            dao=self._dao,
-            verifier=self._verifier,
-            **args)
-
-    def read_by_id(self, object_id):
-        return AbstractGenericService.__read_by_id(
-            dao=self._dao,
-            object_id=object_id)
-
-    # TODO : Add verifier model
-    @staticmethod
-    def __create_with_model(dao, verifier, model):
-
         session = get_session()
         try:
-            response = dao.create(
-                session=session,
-                model=model)
-            session.commit()
-
-        except AttributeException:
-            session.rollback()
-            current_app.logger.info("coucou")
-            raise
-        finally:
-            session.close()
-        return response
-
-    @staticmethod
-    def __create_with_dict(dao, verifier, **args):
-
-        session = get_session()
-        response = None
-        try:
-            lol = verifier.verify_args(**args)
-            table = dao.table
-            current_app.logger.info(args)
+            lol = self._verifier.verify_args(**args)
+            table = self._dao.table
             model = table(**lol)
-            response = dao.create(
+            response = self._dao.create(
                 session=session,
                 model=model)
             session.commit()
-
+        except OperationalError:
+            raise LockedDatabaseException(
+                action='create',
+                table=self._dao.table)
         except AttributeException:
             session.rollback()
-            current_app.logger.info("coucou")
             raise
         finally:
             session.close()
         return response
 
-    @staticmethod
-    def __read_by_id(dao, object_id):
+    def read_all(self, filters):
         session = get_session()
         try:
-            response = dao.read_by_id(
+            response = self._dao.read_all(
                 session=session,
-                object_id=int(object_id))
+                filters=filters)
+            return response
+        except DAOException as err:
+            raise err
+        finally:
+            session.close()
 
-        except DAOException as dao_exception:
-            raise dao_exception
-        except ValueError:
-            raise IdIsNotAnIntegerException(
-                table=dao.table,
-                attribute_value=object_id)
+    def delete(self, filters):
+        session = get_session()
+        try:
+            response = self._dao.delete(
+                session=session,
+                filters=filters)
+            session.commit()
+        except OperationalError:
+            session.rollback()
+            raise LockedDatabaseException(
+                action='delete',
+                table=self._dao.table)
+        except DAOException as err:
+            session.rollback()
+            raise err
         finally:
             session.close()
         return response

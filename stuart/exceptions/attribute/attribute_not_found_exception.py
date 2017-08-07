@@ -8,7 +8,7 @@ class AttributeNotFoundException(AttributeException):
         self.status_code = 400
         self.object = table.table_name()
         self.needed_attributes = str(needed_attributes).strip('[]')
-        self.message = "Attributes : {} needed for object {}" \
+        self.message = "Attribute '{}' needed for object '{}'" \
             .format(self.needed_attributes, self.object)
 
     @property
