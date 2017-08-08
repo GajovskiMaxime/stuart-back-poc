@@ -1,0 +1,118 @@
+@startuml
+class Module {
+  + id: Integer
+  + label: String
+  + command: String
+  + is_preset: Boolean
+  + created_at: Date
+  + actions: List<Action>
+}
+
+class Action {
+  + id: Integer
+  + module_id: Integer
+  + category: String
+  + label: String
+  + command: String
+  + is_tested: boolean
+  + is_preset: boolean
+}
+
+class Task {
+  + id: Integer
+  + action_id : Integer
+  + custom_label: String
+  + needed_params: String
+  + default_params: String
+}
+
+
+class UserTask {
+  + id: Integer
+  + task_id: Integer
+  + user_params: String
+  + task_events: List<TaskEvent>
+}
+class TaskEvent{
+  + id: Integer
+  + user_task_id: Integer
+  + status: Enum(working/terminated)
+  + begin_date: Date
+  + end_date: Date
+}
+
+
+class LogEvent {
+  + id: Integer
+  + task_event_id: Integer
+  + status_code: Integer
+  + stderr: String
+  + stdout: String
+}
+
+class Scenario {
+  + id: Integer
+  + label: String
+  + description: String
+  + starter_task_id: Integer
+  + scenario_tasks: List<ScenarioTask>
+}
+class ScenarioTask {
+
+  + scenario_id: Integer
+  + inner_scenario_id: Integer
+  + success_id: Integer
+  + error_id: Integer
+}
+
+
+class UserScenario {
+  + id: Integer
+  + scenario_id: Integer
+  + user_tasks: List<UserTask>
+  + scenario_events: List<ScenarioEvent>
+}
+
+
+class ScenarioEvent {
+  + id: Integer
+  + user_scenario_id: Integer
+  + status: Enum(working/terminated)
+  + begin_date: Date
+  + end_date: Date
+  + task_events: List<TaskEvent>
+}
+
+
+Module "1" *--> "0..*" Action : est composé de
+
+
+Action "1" <-- "0..*" Task : est associé à
+
+
+Task "1" <-- "0..*" UserTask : est associé à
+
+
+UserTask "1" <--> "0..*" TaskEvent : est associé à
+
+
+TaskEvent "1" <-- "1" LogEvent : est généré par
+
+
+Scenario "1" *--> "0..*" ScenarioTask : est composé de
+
+
+Task <|-- ScenarioTask : hérite de
+
+
+Scenario "1" <-- "0..*" UserScenario : est associé à
+
+
+UserTask "0..*" <-- "1" UserScenario : contient
+
+
+UserScenario "1" <--> "0..*" ScenarioEvent : est associé à
+
+
+TaskEvent "0..*" <-- "1" ScenarioEvent : contient
+@enduml

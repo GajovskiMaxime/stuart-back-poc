@@ -15,26 +15,26 @@ class Action(db.Model, AbstractModel):
     # --------- Columns ---------
 
     id = db.Column(
-        **_properties.get_column('id'))
+        **_properties.get_sql_attr_column('id'))
 
     module_id = db.Column(
         db.ForeignKey('MODULE.ID'),
-        **_properties.get_column('module_id'))
+        **_properties.get_sql_attr_column('module_id'))
 
     category = db.Column(
-        **_properties.get_column('category'))
+        **_properties.get_sql_attr_column('category'))
 
     label = db.Column(
-        **_properties.get_column('label'))
+        **_properties.get_sql_attr_column('label'))
 
     command = db.Column(
-        **_properties.get_column('command'))
+        **_properties.get_sql_attr_column('command'))
 
     is_tested = db.Column(
-        **_properties.get_column('is_tested'))
+        **_properties.get_sql_attr_column('is_tested'))
 
     is_preset = db.Column(
-        **_properties.get_column('is_preset'))
+        **_properties.get_sql_attr_column('is_preset'))
 
     # --------- Constraints ---------
 

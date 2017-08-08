@@ -8,6 +8,6 @@ class ParamsDictionariesVerifier(ModelVerifier):
         super(ParamsDictionariesVerifier, self).__init__(
             table=ParamsDictionaries)
 
-    def verify_args(self, **args):
+    def verify(self, **args):
         return super(ParamsDictionariesVerifier, self).\
-            verify_args(**args)
+            verify(**args)

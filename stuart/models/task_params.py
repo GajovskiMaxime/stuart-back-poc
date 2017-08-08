@@ -3,6 +3,7 @@ from sqlalchemy import UniqueConstraint
 from stuart.database.database import db
 
 from stuart.models.abstract_model import AbstractModel
+from stuart.models_properties.task_params_properties import TaskParamsProperties
 
 
 class TaskParams(db.Model, AbstractModel):
@@ -14,36 +15,39 @@ class TaskParams(db.Model, AbstractModel):
     # --------- Columns ---------
 
     id = db.Column(
-        **_properties.get_column('id'))
+        **_properties.get_sql_attr_column('id'))
 
-    params_patterns_id = db.Column(
-        db.ForeignKey('PARAMS_PATTERNS.ID'),
-        **_properties.get_column('params_patterns_id'))
+    generic_params_patterns = db.Column(
+        db.ForeignKey('GENERIC_PARAMS_PATTERNS.ID'),
+        **_properties.get_sql_attr_column('generic_params_patterns'))
 
-    params_dictionaries_id = db.Column(
+    params_dictionaries = db.Column(
         db.ForeignKey('PARAMS_DICTIONARIES.ID'),
-        **_properties.get_column('params_dictionaries_id'))
+        **_properties.get_sql_attr_column('params_dictionaries'))
 
     # --------- Relationships ---------
 
-    params_patterns = db.relationship(**_properties.get_relation('params_patterns'))
-    params_dictionaries = db.relationship(**_properties.get_relation('params_dictionaries'))
+    generic_params_patterns_relation = db.relationship(
+        **_properties.get_relation('generic_params_patterns'))
+
+    params_dictionaries_relation = db.relationship(
+        **_properties.get_relation('params_dictionaries'))
 
     # --------- Constraints ---------
 
-    UniqueConstraint(params_patterns_id, params_dictionaries_id)
+    UniqueConstraint(generic_params_patterns, params_dictionaries)
 
-    def __init__(self, params_patterns_id, params_dictionaries_id):
+    def __init__(self, generic_params_patterns, params_dictionaries):
         super().__init__()
-        self.params_patterns_id = params_patterns_id
-        self.params_dictionaries_id = params_dictionaries_id
+        self.generic_params_patterns = generic_params_patterns
+        self.params_dictionaries = params_dictionaries
 
     # --- Display functions ---
 
     @property
     def serialize(self):
         lazy_dict = self.serialize_lazy
-        lazy_dict['params_patterns'] = self.params_patterns.serialize_lazy
+        lazy_dict['params_patterns'] = self.generic_params_patterns.serialize_lazy
         lazy_dict['params_dictionaries'] = self.params_dictionaries.serialize_lazy
         return lazy_dict
 
@@ -51,6 +55,6 @@ class TaskParams(db.Model, AbstractModel):
     def serialize_lazy(self):
         return {
             'id':                       self.id,
-            'params_patterns':       self.params_patterns_id,
-            'params_dictionaries':   self.params_dictionaries_id
+            'generic_params_patterns':  self.generic_params_patterns,
+            'params_dictionaries':      self.params_dictionaries
         }

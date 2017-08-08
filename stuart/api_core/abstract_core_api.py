@@ -12,15 +12,13 @@ class AbstractCoreAPI(object):
     def __init__(self, service):
         self._service = service
 
-    def read_all(self, filters):
+    def read(self, filters):
         insensitive_filter_list = get_insensitive_filters_list(
             filters=filters)
         is_lazy, insensitive_filter_list = split_into_lazy_arg_and_filters_list(
             filters=insensitive_filter_list)
-        current_app.logger.info(is_lazy)
-        current_app.logger.info(insensitive_filter_list )
         try:
-            response = self._service.read_all(
+            response = self._service.read(
                 filters=insensitive_filter_list)
 
             fct_response, response = (object_to_json_with_lazy_attr, response[0]) \
@@ -41,7 +39,7 @@ class AbstractCoreAPI(object):
                 request=request,
                 requested_object_name=self._service.dao.table.table_name())
 
-            created_obj = self._service.create_with_dict(
+            created_obj = self._service.create(
                 args=obj_from_request)
         except ServiceException as err:
             return json_response(**err.serialize)

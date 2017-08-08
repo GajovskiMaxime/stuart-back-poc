@@ -14,13 +14,13 @@ class GenericParamsPatterns(db.Model, AbstractModel):
     # --------- Columns ---------
 
     id = db.Column(
-        **_properties.get_column('id'))
+        **_properties.get_sql_attr_column('id'))
 
     generic_args_pattern = db.Column(
-        **_properties.get_column('args_pattern'))
+        **_properties.get_sql_attr_column('generic_args_pattern'))
 
     generic_target_pattern = db.Column(
-        **_properties.get_column('target_pattern'))
+        **_properties.get_sql_attr_column('generic_target_pattern'))
 
     # --------- Constraints ---------
 

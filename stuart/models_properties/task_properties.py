@@ -13,28 +13,28 @@ class TaskParamsProperties(AbstractModelProperties):
                     'primary_key': True
                 }
             },
-            'generic_params_patterns': {
+            'params_patterns_id': {
                 'sql': {
                     'type_': Integer,
                     'nullable': False
                 },
                 'json': {
-                    'expected_type': 'object'
+                    'object_expected': True
                 }
             },
-            'params_dictionaries': {
+            'params_dictionaries_id': {
                 'sql': {
                     'type_': Integer,
                     'nullable': False
                 },
                 'json': {
-                    'expected_type': 'object'
+                    'object_expected': True
                 }
             },
         },
         'relationships': {
-            'generic_params_patterns': {
-                'argument': 'GenericParamsPatterns',
+            'params_patterns': {
+                'argument': 'ParamsPatterns',
                 'lazy': 'subquery',
                 'cascade': 'save-update, merge, delete'
             },

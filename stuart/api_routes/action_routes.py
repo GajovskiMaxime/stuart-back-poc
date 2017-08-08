@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app
+from flask import Blueprint, request
 
 from stuart.api_core.action_core_api import ActionCoreAPI
 
@@ -18,7 +18,7 @@ class ActionRoutes(object):
         dictionary = request.args.to_dict()
         dictionary['id'] = action_id
         dictionary['module_id'] = module_id
-        return ActionCoreAPI().read_all(
+        return ActionCoreAPI().read(
             filters=dictionary)
 
     # TODO: No control on module_id
@@ -27,13 +27,13 @@ class ActionRoutes(object):
     def read_all(module_id):
         dictionary = request.args.to_dict()
         dictionary['module_id'] = module_id
-        return ActionCoreAPI().read_all(
+        return ActionCoreAPI().read(
             filters=dictionary)
 
     @staticmethod
     @action_blueprint.route('/', methods=['PUT'])
     def create(module_id):
-        return ActionCoreAPI().create(filters=request)
+        return ActionCoreAPI().create(request)
 
     @staticmethod
     @action_blueprint.route('/<string:action_id>/', methods=['DELETE'])

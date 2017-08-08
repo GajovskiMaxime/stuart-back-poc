@@ -8,5 +8,5 @@ class ModuleVerifier(ModelVerifier):
         super(ModuleVerifier, self).__init__(
             table=Module)
 
-    def verify_args(self, **args):
-        return super(ModuleVerifier, self).verify_args(**args)
+    def verify(self, **args):
+        return super(ModuleVerifier, self).verify(**args)

@@ -1,7 +1,6 @@
 from flask import json
 from sqlalchemy import UniqueConstraint
 
-from stuart.models.utils import get_mandatory_fields_for_post, get_columns_labels
 from stuart.database.database import db
 from stuart.models.abstract_model import AbstractModel
 from stuart.models_properties.params_dictionaries_properties import ParamsDictionariesProperties
@@ -16,13 +15,13 @@ class ParamsDictionaries(db.Model, AbstractModel):
     # --------- Columns ---------
 
     id = db.Column(
-        **_properties.get_column('id'))
+        **_properties.get_sql_attr_column('id'))
 
     args_dictionary = db.Column(
-        **_properties.get_column('args_map'))
+        **_properties.get_sql_attr_column('args_dictionary'))
 
     target_dictionary = db.Column(
-        **_properties.get_column('target_map'))
+        **_properties.get_sql_attr_column('target_dictionary'))
 
     # --------- Constraints ---------
 

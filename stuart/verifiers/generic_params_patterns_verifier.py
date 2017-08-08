@@ -8,6 +8,6 @@ class GenericParamsPatternsVerifier(ModelVerifier):
         super(GenericParamsPatternsVerifier, self).__init__(
             table=GenericParamsPatterns)
 
-    def verify_args(self, **args):
+    def verify(self, **args):
         return super(GenericParamsPatternsVerifier, self).\
-            verify_args(**args)
+            verify(**args)

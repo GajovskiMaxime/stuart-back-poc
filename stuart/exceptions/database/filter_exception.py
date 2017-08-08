@@ -7,7 +7,7 @@ class FilterException(DatabaseException):
         super(FilterException, self)
         self.status_code = 404
         self.filters = filters
-        self.message = "Something wrong occurs with the filter {}." \
+        self.message = "Something wrong occurs with filters : {}." \
                        .format(self.filters)
 
     @property

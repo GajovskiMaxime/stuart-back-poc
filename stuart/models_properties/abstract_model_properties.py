@@ -4,18 +4,24 @@ class AbstractModelProperties(object):
     def __init__(self, properties):
         self.__properties = properties
         for key, value in self.get_columns().items():
-            value['name'] = key.upper()
+            value['sql']['name'] = key.upper()
 
-        mandatory_fields = []
+        mandatory_keys = []
         for k_column, v_column in self.get_columns().items():
-            if 'nullable' in v_column \
-                    and v_column['nullable'] is False\
-                    and 'default' not in v_column:
-                mandatory_fields.append(k_column)
-        self.__properties['mandatory_fields'] = mandatory_fields
+            if 'nullable' in v_column['sql'] \
+                    and v_column['sql']['nullable'] is False\
+                    and 'default' not in v_column['sql']:
+                mandatory_keys.append(k_column)
+        self.__properties['mandatory_keys'] = mandatory_keys
 
-    def get_mandatory_fields(self):
-        return self.__properties['mandatory_fields']
+    def get_mandatory_keys(self):
+        return self.__properties['mandatory_keys']
+
+    def get_sql_attr_column(self, key):
+        return self.__properties['columns'][key]['sql']
+
+    def get_json_attr_column(self, key):
+        return self.__properties['columns'][key]['json']
 
     def get_column(self, key):
         return self.__properties['columns'][key]

@@ -15,14 +15,14 @@ class ModuleRoutes(object):
     def read_by_id(module_id):
         dictionary = request.args.to_dict()
         dictionary['id'] = module_id
-        return ModuleCoreAPI().read_all(
+        return ModuleCoreAPI().read(
             filters=dictionary)
 
     @staticmethod
     @module_blueprint.route('/', methods=['GET'])
     def read_all():
         dictionary = request.args.to_dict()
-        return ModuleCoreAPI().read_all(
+        return ModuleCoreAPI().read(
             filters=dictionary)
 
     @staticmethod

@@ -13,11 +13,11 @@ class TestActionReadRoutes(BaseTestCase):
     def setUp(self):
         recreate_database()
         nominal_module_dict = {'label': 'test', 'command': 'command'}
-        new_module = ModuleService().create_with_dict(args=nominal_module_dict)
+        new_module = ModuleService().create(args=nominal_module_dict)
         action_dict = {'module_id': new_module.id, 'label': 'test', 'command': 'test'}
-        ActionService().create_with_dict(args=action_dict)
+        ActionService().create(args=action_dict)
 
-    def test_read_action_on_nominal_case(self):
+    def test_read_action_by_id_on_nominal_case(self):
         """
             :case: Nominal case. (action belongs to module)
             :method: GET
@@ -30,7 +30,7 @@ class TestActionReadRoutes(BaseTestCase):
             response = self.client.get('/modules/1/actions/1/')
             self.assertEqual(response.status_code, 200)
 
-    def test_read_action_who_does_not_belongs_to_module(self):
+    def test_read_action_by_id_who_does_not_belongs_to_module(self):
         """
             :case: Action does not belong to module
             :method: GET
@@ -69,7 +69,47 @@ class TestActionReadRoutes(BaseTestCase):
             response = self.client.get('/modules/1/actions/test/')
             self.assertEqual(response.status_code, 404)
 
-    # Not Passing
+    def test_read_action_with_one_query_param(self):
+        """
+            :case: Search with one query param (search : (label,test))
+            :method: GET
+            :path: http://localhost:port/modules/<module_id>/actions/<action_id>/?label=test
+            :module_id:1
+            :action_id:1
+            :filters:(label,test)
+            :expected_status:200
+        """
+        with self.client:
+            response = self.client.get('/modules/1/actions/1/?label=test')
+            self.assertEqual(response.status_code, 200)
+
+    def test_read_action_with_query_params(self):
+        """
+            :case: Search with query params (search : (label,test), (id,1))
+            :method: GET
+            :path: http://localhost:port/modules/<module_id>/actions/?label=test&id=1
+            :module_id:1
+            :query_params:(label,test), (id,1)
+            :expected_status:200
+        """
+        with self.client:
+            response = self.client.get('/modules/1/actions/?label=test&id=1')
+            self.assertEqual(response.status_code, 200)
+
+    def test_read_action_with_unexpected_key_on_query_param(self):
+        """
+            :case: Search with unexpected key filter (search : (test,test))
+            :method: GET
+            :path: http://localhost:port/modules/<module_id>/actions/?test=test
+            :module_id:1
+            :query_params:(test,test)
+            :expected_status:400
+        """
+        with self.client:
+            response = self.client.get('/modules/1/actions/?test=test')
+            self.assertEqual(response.status_code, 404)
+
+                    # Not Passing
     # def test_read_action_when_nothing_on_database(self):
     #     """
     #         :case: Nothing on table action

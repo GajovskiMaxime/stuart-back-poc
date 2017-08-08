@@ -14,21 +14,14 @@ class Module(db.Model, AbstractModel):
 
     # --------- Columns ---------
 
-    id = db.Column(
-        **_properties.get_column('id'))
-
-    label = db.Column(
-        **_properties.get_column('label'))
-
-    command = db.Column(
-        **_properties.get_column('command'))
-
-    is_preset = db.Column(
-        **_properties.get_column('is_preset'))
+    id = db.Column(**_properties.get_sql_attr_column('id'))
+    label = db.Column(**_properties.get_sql_attr_column('label'))
+    command = db.Column(**_properties.get_sql_attr_column('command'))
+    is_preset = db.Column(**_properties.get_sql_attr_column('is_preset'))
 
     # --------- Relationships ---------
 
-    action_list = db.relationship(**_properties.get_relation('actions'))
+    action_list = db.relationship(**_properties.get_relation('action_list'))
 
     # --------- Constraints ---------
 

@@ -13,32 +13,33 @@ class AbstractGenericDAO(object):
         super(AbstractGenericDAO, self).__init__()
         self._table = table
 
-    def create(self, session, model):
+    def create(self, session, args):
+        model = self._table(**args)
         session.add(model)
+        session.flush()
         return model
 
     def __get_objects_with_filters(self, query, filters):
         try:
-
             for k, v in filters.items():
                 if not v or v is None:
                     query = query.filter(self._table.__getattribute__(self._table, k).is_(None))
 
-                elif self._table.properties().get_column(k)['type_'] is Boolean:
+                elif self._table.properties().get_sql_attr_column(k)['type_'] is Boolean:
                     v = True if v.lower() == 'true' else False
                     query = query.filter(self._table.__getattribute__(self._table, k).is_(v))
 
-                elif self._table.properties().get_column(k)['type_'] is String:
+                elif self._table.properties().get_sql_attr_column(k)['type_'] is String:
                     query = query.filter(self._table.__getattribute__(self._table, k).ilike('%' + v + '%'))
 
-                if self._table.properties().get_column(k)['type_'] is Integer:
+                if self._table.properties().get_sql_attr_column(k)['type_'] is Integer:
                     query = query.filter(self._table.__getattribute__(self._table, k) == int(v))
-        except ValueError:
+        except (ValueError, KeyError):
             raise FilterException(
                 filters=filters)
         return query.all()
 
-    def read_all(self, session, filters):
+    def read(self, session, filters):
         objects = self.__get_objects_with_filters(
             query=session.query(self._table),
             filters=filters)
@@ -55,7 +56,7 @@ class AbstractGenericDAO(object):
 
     def delete(self, session, filters):
         try:
-            object_from_db = self.read_all(
+            object_from_db = self.read(
                 session=session,
                 filters=filters)[0]
 
