@@ -1,0 +1,27 @@
+FROM python:2.7.12
+MAINTAINER Gajovski Maxime <gajovski.maxime@gmail.com>
+
+ENV APP_NAME="stuart"
+
+#Update and upgrade
+RUN apt-get update && apt-get upgrade -y
+
+#Add SaltStack repo and update
+RUN \
+  echo 'deb http://ppa.launchpad.net/saltstack/salt/ubuntu jessie main' && \
+  apt-get update
+
+#Add Salt-Master
+RUN apt-get install -y salt-master
+
+# Fix Working dir.
+RUN mkdir -p /usr/src/$APP_NAME
+WORKDIR /usr/src/$APP_NAME
+
+# Stuart instalation
+ADD ./requirements.txt /usr/src/$APP_NAME/requirements.txt
+RUN pip install -r requirements.txt
+ADD . /usr/src/$APP_NAME
+
+CMD salt-master --log-level='error' -d && \
+    python manage.py runserver -h 0.0.0.0

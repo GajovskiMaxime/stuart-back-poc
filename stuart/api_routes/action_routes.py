@@ -17,7 +17,7 @@ class ActionRoutes(object):
     def read_by_id(module_id, action_id):
         dictionary = request.args.to_dict()
         dictionary['id'] = action_id
-        dictionary['module_id'] = module_id
+        dictionary['module'] = module_id
         return ActionCoreAPI().read(
             filters=dictionary)
 
@@ -26,7 +26,7 @@ class ActionRoutes(object):
     @action_blueprint.route('/', methods=['GET'])
     def read_all(module_id):
         dictionary = request.args.to_dict()
-        dictionary['module_id'] = module_id
+        dictionary['module'] = module_id
         return ActionCoreAPI().read(
             filters=dictionary)
 
@@ -40,6 +40,6 @@ class ActionRoutes(object):
     def delete(module_id, action_id):
         dictionary = request.args.to_dict()
         dictionary['id'] = action_id
-        dictionary['module_id'] = module_id
+        dictionary['module'] = module_id
         return ActionCoreAPI().delete(
             filters=dictionary)

@@ -1,4 +1,4 @@
-from flask import jsonify, current_app
+from flask import jsonify
 
 from stuart.exceptions.service_exception import ServiceException
 from stuart.utils.api_utils import json_response

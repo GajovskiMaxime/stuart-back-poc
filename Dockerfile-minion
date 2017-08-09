@@ -1,0 +1,19 @@
+FROM python:2.7.12
+MAINTAINER Maxime Gajovski <gajovski.maxime@gmail.com>
+
+#Update and upgrade
+RUN apt-get update && apt-get upgrade -y
+
+#Add SaltStack repo and update
+RUN \
+  echo 'deb http://ppa.launchpad.net/saltstack/salt/ubuntu jessie main' && \
+  apt-get update
+
+#Add Salt-Minion
+RUN apt-get install -y salt-minion
+
+#Run Salt-minion
+CMD echo 'master: gru' >> /etc/salt/minion && \
+    echo 'minion' > /etc/salt/minion_id && \
+    salt-minion --log-level='error'
+

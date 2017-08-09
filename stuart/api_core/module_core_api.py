@@ -5,5 +5,5 @@ from stuart.services.module_services import ModuleService
 class ModuleCoreAPI(AbstractCoreAPI):
 
     def __init__(self):
-        super().__init__(
+        super(ModuleCoreAPI, self).__init__(
             service=ModuleService())

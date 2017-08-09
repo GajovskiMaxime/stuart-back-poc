@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  gru:
+    container_name: gru
+    build:
+      context: .
+      dockerfile: Dockerfile-master
+    volumes:
+      - '.:/usr/src/stuart'
+    ports:
+      - 5001:5000
+    networks:
+      - salt
+
+  minion:
+    container_name: minion
+    build:
+      context: .
+      dockerfile: Dockerfile-minion
+
+    networks:
+      - salt
+
+networks:
+  salt:

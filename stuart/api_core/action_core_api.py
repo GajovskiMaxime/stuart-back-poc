@@ -4,5 +4,5 @@ from stuart.services.action_services import ActionService
 
 class ActionCoreAPI(AbstractCoreAPI):
     def __init__(self):
-        super().__init__(
+        super(ActionCoreAPI, self).__init__(
             service=ActionService())
