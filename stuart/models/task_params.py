@@ -47,8 +47,12 @@ class TaskParams(db.Model, AbstractModel):
     @property
     def serialize(self):
         lazy_dict = self.serialize_lazy
-        lazy_dict['params_patterns'] = self.generic_params_patterns.serialize_lazy
-        lazy_dict['params_dictionaries'] = self.params_dictionaries.serialize_lazy
+        lazy_dict['generic_params_patterns'] = self.\
+            generic_params_patterns_relation\
+            .serialize_lazy
+
+        lazy_dict['params_dictionaries'] = self.params_dictionaries_relation\
+            .serialize_lazy
         return lazy_dict
 
     @property

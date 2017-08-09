@@ -13,9 +13,9 @@ class TestActionReadRoutes(BaseTestCase):
     def setUp(self):
         recreate_database()
         nominal_module_dict = {'label': 'test', 'command': 'command'}
-        new_module = ModuleService().create(args=nominal_module_dict)
+        new_module = ModuleService().create(args=nominal_module_dict, autocommit=True)
         action_dict = {'module_id': new_module.id, 'label': 'test', 'command': 'test'}
-        ActionService().create(args=action_dict)
+        ActionService().create(args=action_dict, autocommit=True)
 
     def test_read_module_by_id_on_nominal_case(self):
         """

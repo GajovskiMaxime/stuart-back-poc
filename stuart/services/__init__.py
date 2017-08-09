@@ -1,5 +1,7 @@
 from stuart.services.generic_params_patterns_services import GenericParamsPatternsService
 from stuart.services.params_dictionaries_services import ParamsDictionariesService
 from stuart.services.task_params_services import TaskParamsService
+from stuart.services.task_services import TaskService
+from stuart.services.user_task_services import UserTaskService
 from stuart.services.action_services import ActionService
 from stuart.services.module_services import ModuleService

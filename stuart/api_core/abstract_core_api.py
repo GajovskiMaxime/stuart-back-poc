@@ -19,7 +19,8 @@ class AbstractCoreAPI(object):
             filters=insensitive_filter_list)
         try:
             response = self._service.read(
-                filters=insensitive_filter_list)
+                filters=insensitive_filter_list,
+                mode='contains')
 
             fct_response, response = (object_to_json_with_lazy_attr, response[0]) \
                 if len(response) == 1 \
@@ -40,7 +41,8 @@ class AbstractCoreAPI(object):
                 requested_object_name=self._service.dao.table.table_name())
 
             created_obj = self._service.create(
-                args=obj_from_request)
+                args=obj_from_request,
+                autocommit=False)
         except ServiceException as err:
             return json_response(**err.serialize)
 
@@ -51,9 +53,9 @@ class AbstractCoreAPI(object):
 
     def delete(self, filters):
         try:
-            current_app.logger.info(filters)
             self._service.delete(
-                filters=filters)
+                filters=filters,
+                mode='exact')
         except ServiceException as err:
             return json_response(**err.serialize)
 

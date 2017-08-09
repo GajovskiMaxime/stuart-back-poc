@@ -1,8 +1,16 @@
 import sys
+from json import JSONDecodeError
+
+from flask import json, current_app
 from sqlalchemy import String
+
 from stuart.exceptions.attribute.attribute_exception import AttributeException
 from stuart.exceptions.attribute.attribute_not_found_exception import AttributeNotFoundException
 from stuart.exceptions.attribute.empty_attribute_exception import EmptyAttributeException
+from stuart.exceptions.database.database_exception import DatabaseException
+from stuart.exceptions.database.unique_constraint_exception import UniqueConstraintException
+from stuart.exceptions.json.double_quote_enclosure_exception import DoubleQuoteEnclosureException
+from stuart.exceptions.json.malformed_json_exception import MalformedJSONObjectException
 
 
 class ModelVerifier(object):
@@ -40,24 +48,55 @@ class ModelVerifier(object):
     #                 unexpected_value=v_column)
     #     return copy_args
 
-    # TODO : Need to use service instead of DAO (for control)
-    # TODO : Need to find a solution with session.commit (shared session)
-    def verify_values(self, session, **args):
+    def verify_values_with_recursion(self, session, autocommit, **args):
         for k, v in args.items():
-            if self._table.properties().get_json_attr_column(k)['expected_type'] == 'object':
-                class_name = self._table.properties().get_relation(k)['argument']
-                dao_class = str(class_name + 'DAO')
-                dao = getattr(sys.modules['stuart.dao'], dao_class)()
-                created_object = dao.create(
-                    session=session,
-                    args=v)
-                args[k] = created_object.id
+            try:
+                json_type = self._table.properties().get_json_attr_column(k)['expected_type']
+                if json_type == 'json_string':
+                    try:
+                        json.loads(v)
+                    except JSONDecodeError as json_err:
+                        if 'Expecting value' in json_err.args[0]:
+                            raise MalformedJSONObjectException(
+                                key=k,
+                                value=v)
+                        if 'Expecting property name enclosed in double quotes' in json_err.args[0]:
+                            raise DoubleQuoteEnclosureException(
+                                value=v)
+                elif json_type == 'field':
+                    pass
+                else:
+                    class_name = self._table.properties().get_relation(k)['argument']
+                    service_class = str(class_name + 'Service')
+                    service = getattr(sys.modules['stuart.services'], service_class)()
+                    if json_type == 'id':
+                        try:
+                            service.read(
+                                filters={'id': v},
+                                mode='exact')
+                        except DatabaseException:
+                            raise
+
+                    elif json_type == 'object':
+                        created_object = service.create_with_recursion(
+                            args=v,
+                            session=session,
+                            autocommit=autocommit)
+                        args[k] = created_object.id
+
+            except UniqueConstraintException as err:
+                args[k] = err.object_id
+
         return args
 
-    def verify(self, session, args):
+    def verify(self, autocommit, session, args):
         try:
+
             self.verify_mandatory_keys(**args)
-            verified_args = self.verify_values(session, **args)
+            verified_args = self.verify_values_with_recursion(
+                session=session,
+                autocommit=autocommit,
+                **args)
 
             # self.verify_extra_fields(
             #     **args)

@@ -1,9 +1,11 @@
-from sqlalchemy import Integer
+from datetime import datetime
+
+from sqlalchemy import Integer, String, DateTime
 
 from stuart.models_properties.abstract_model_properties import AbstractModelProperties
 
 
-class TaskParamsProperties(AbstractModelProperties):
+class TaskProperties(AbstractModelProperties):
 
     __properties = {
         'columns': {
@@ -13,33 +15,52 @@ class TaskParamsProperties(AbstractModelProperties):
                     'primary_key': True
                 }
             },
-            'params_patterns_id': {
+            'action': {
                 'sql': {
                     'type_': Integer,
                     'nullable': False
                 },
                 'json': {
-                    'object_expected': True
+                    'expected_type': 'id'
                 }
             },
-            'params_dictionaries_id': {
+            'custom_label': {
+                'sql': {
+                    'type_': String,
+                    'nullable': False
+                },
+                'json': {
+                    'expected_type': 'field'
+                }
+            },
+            'task_params': {
                 'sql': {
                     'type_': Integer,
                     'nullable': False
                 },
                 'json': {
-                    'object_expected': True
+                    'expected_type': 'object'
+                }
+            },
+            'created_at': {
+                'sql': {
+                    'type_': DateTime,
+                    'nullable': False,
+                    'default': datetime.now()
+                },
+                'json': {
+                    'expected_type': 'field'
                 }
             },
         },
         'relationships': {
-            'params_patterns': {
-                'argument': 'ParamsPatterns',
-                'lazy': 'subquery',
+            'task_params': {
+                'argument': 'TaskParams',
+                'lazy': 'joined',
                 'cascade': 'save-update, merge, delete'
             },
-            'params_dictionaries': {
-                'argument': 'ParamsDictionaries',
+            'action': {
+                'argument': 'Action',
                 'lazy': 'subquery',
                 'cascade': 'save-update, merge, delete'
             }
@@ -47,4 +68,5 @@ class TaskParamsProperties(AbstractModelProperties):
     }
 
     def __init__(self):
-        super(TaskParamsProperties, self).__init__(self.__properties)
+        super(TaskProperties, self).__init__(
+            self.__properties)

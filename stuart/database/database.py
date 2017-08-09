@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 db = SQLAlchemy()
 
+
 def get_session():
     engine = db.get_engine(app=current_app)
     new_session = sessionmaker(

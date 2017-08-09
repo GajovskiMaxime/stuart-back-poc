@@ -13,9 +13,9 @@ class TestActionReadRoutes(BaseTestCase):
     def setUp(self):
         recreate_database()
         nominal_module_dict = {'label': 'test', 'command': 'command'}
-        new_module = ModuleService().create(args=nominal_module_dict)
+        new_module = ModuleService().create(args=nominal_module_dict, autocommit=True)
         action_dict = {'module_id': new_module.id, 'label': 'test', 'command': 'test'}
-        ActionService().create(args=action_dict)
+        ActionService().create(args=action_dict, autocommit=True)
 
     def test_read_action_by_id_on_nominal_case(self):
         """
@@ -108,8 +108,7 @@ class TestActionReadRoutes(BaseTestCase):
         with self.client:
             response = self.client.get('/modules/1/actions/?test=test')
             self.assertEqual(response.status_code, 404)
-
-                    # Not Passing
+    #
     # def test_read_action_when_nothing_on_database(self):
     #     """
     #         :case: Nothing on table action

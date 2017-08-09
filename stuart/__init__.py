@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
 
-
 from stuart.database.database import db
 from stuart.path_utils import get_app_base_path
 
@@ -13,13 +12,16 @@ def create_app():
 
     from stuart.api_routes.module_routes import ModuleRoutes
     from stuart.api_routes.action_routes import ActionRoutes
-    from stuart.api_routes.task_params_routes import TaskParamsRoutes
+    from stuart.api_routes.task_routes import TaskRoutes
     from stuart.models.generic_params_patterns import GenericParamsPatterns
     from stuart.models.params_dictionary import ParamsDictionaries
+    from stuart.api_routes.user_task_routes import UserTaskRoutes
 
     app.register_blueprint(ModuleRoutes.module_blueprint)
-    app.register_blueprint(TaskParamsRoutes.task_params_blueprint)
     app.register_blueprint(ActionRoutes.action_blueprint)
+    app.register_blueprint(TaskRoutes.task_blueprint)
+    app.register_blueprint(UserTaskRoutes.user_task_blueprint)
+
 
     CORS(app)
     db.init_app(app)

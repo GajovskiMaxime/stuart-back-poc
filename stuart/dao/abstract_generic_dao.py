@@ -19,19 +19,19 @@ class AbstractGenericDAO(object):
         session.flush()
         return model
 
-    def __get_objects_with_filters(self, query, filters):
+    def __get_objects_with_filters(self, query, mode, filters):
         try:
             for k, v in filters.items():
-                if not v or v is None:
+                if v is None:
                     query = query.filter(self._table.__getattribute__(self._table, k).is_(None))
-
                 elif self._table.properties().get_sql_attr_column(k)['type_'] is Boolean:
                     v = True if v.lower() == 'true' else False
                     query = query.filter(self._table.__getattribute__(self._table, k).is_(v))
-
                 elif self._table.properties().get_sql_attr_column(k)['type_'] is String:
-                    query = query.filter(self._table.__getattribute__(self._table, k).ilike('%' + v + '%'))
-
+                    if mode == 'contains':
+                        query = query.filter(self._table.__getattribute__(self._table, k).ilike('%' + v + '%'))
+                    if mode == 'exact':
+                        query = query.filter(self._table.__getattribute__(self._table, k) == str(v))
                 if self._table.properties().get_sql_attr_column(k)['type_'] is Integer:
                     query = query.filter(self._table.__getattribute__(self._table, k) == int(v))
         except (ValueError, KeyError):
@@ -39,26 +39,27 @@ class AbstractGenericDAO(object):
                 filters=filters)
         return query.all()
 
-    def read(self, session, filters):
-        objects = self.__get_objects_with_filters(
-            query=session.query(self._table),
-            filters=filters)
+    def read(self, session, filters, mode):
+        try:
+            objects = self.__get_objects_with_filters(
+                query=session.query(self._table),
+                filters=filters,
+                mode=mode)
 
-        if not objects:
-            if len(filters) != 0:
+            if not objects:
                 raise ObjectNotFoundException(
                     filters=filters,
                     table=self._table)
-            raise EmptyTableException(
-                table=self._table)
-
+        except FilterException:
+            raise
         return objects
 
-    def delete(self, session, filters):
+    def delete(self, session, filters, mode):
         try:
             object_from_db = self.read(
                 session=session,
-                filters=filters)[0]
+                filters=filters,
+                mode=mode)[0]
 
             if object_from_db.is_preset:
                 raise PresetException(

@@ -13,28 +13,40 @@ class ActionProperties(AbstractModelProperties):
                     'primary_key': True
                 }
             },
-            'module_id': {
+            'module': {
                 'sql': {
                     'type_': Integer,
                     'nullable': False
+                },
+                'json': {
+                    'expected_type': 'id'
                 }
             },
             'category': {
                 'sql': {
                     'type_': String,
                     'nullable': True
+                },
+                'json': {
+                    'expected_type': 'field'
                 }
             },
             'label': {
                 'sql': {
                     'type_': String,
                     'nullable': False
+                },
+                'json': {
+                    'expected_type': 'field'
                 }
             },
             'command': {
                 'sql': {
                     'type_': String,
                     'nullable': False
+                },
+                'json': {
+                    'expected_type': 'field'
                 }
             },
             'is_tested': {
@@ -42,6 +54,9 @@ class ActionProperties(AbstractModelProperties):
                     'type_': Boolean,
                     'nullable': True,
                     'default': False
+                },
+                'json': {
+                    'expected_type': 'field'
                 }
             },
             'is_preset': {
@@ -53,8 +68,12 @@ class ActionProperties(AbstractModelProperties):
             }
         },
         'relationships': {
+            'module': {
+                'argument': 'Module'
+            }
         }
     }
 
     def __init__(self):
-        super(ActionProperties, self).__init__(self.__properties)
+        super(ActionProperties, self).__init__(
+            self.__properties)

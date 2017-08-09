@@ -18,12 +18,18 @@ class ParamsDictionariesProperties(AbstractModelProperties):
                 'sql': {
                     'type_': String,
                     'nullable': False
+                },
+                'json': {
+                    'expected_type': 'json_string'
                 }
             },
             'target_dictionary': {
                 'sql': {
                     'type_': String,
                     'nullable': False
+                },
+                'json': {
+                    'expected_type': 'json_string'
                 }
             }
         },
@@ -32,4 +38,5 @@ class ParamsDictionariesProperties(AbstractModelProperties):
     }
 
     def __init__(self):
-        super(ParamsDictionariesProperties, self).__init__(self.__properties)
+        super(ParamsDictionariesProperties, self).__init__(
+            self.__properties)

@@ -37,4 +37,5 @@ class GenericParamsPatternsProperties(AbstractModelProperties):
     }
 
     def __init__(self):
-        super(GenericParamsPatternsProperties, self).__init__(self.__properties)
+        super(GenericParamsPatternsProperties, self).__init__(
+            self.__properties)

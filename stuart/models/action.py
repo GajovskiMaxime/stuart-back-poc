@@ -17,9 +17,9 @@ class Action(db.Model, AbstractModel):
     id = db.Column(
         **_properties.get_sql_attr_column('id'))
 
-    module_id = db.Column(
+    module = db.Column(
         db.ForeignKey('MODULE.ID'),
-        **_properties.get_sql_attr_column('module_id'))
+        **_properties.get_sql_attr_column('module'))
 
     category = db.Column(
         **_properties.get_sql_attr_column('category'))
@@ -38,15 +38,15 @@ class Action(db.Model, AbstractModel):
 
     # --------- Constraints ---------
 
-    UniqueConstraint(module_id, command)
+    UniqueConstraint(module, command)
 
     # --------- Constructor ---------
 
-    def __init__(self, module_id, label, command,
+    def __init__(self, module, label, command,
                  category='', is_preset=False, is_tested=False):
         super(Action, self).__init__()
 
-        self.module_id = module_id
+        self.module = module
         self.category = category
         self.label = label
         self.command = command
@@ -59,15 +59,3 @@ class Action(db.Model, AbstractModel):
     def serialize(self):
         lazy_dict = self.serialize_lazy
         return lazy_dict
-
-    @property
-    def serialize_lazy(self):
-        return {
-            'id':            self.id,
-            'module_id':     self.module_id,
-            'category':      self.category,
-            'label':         self.label,
-            'command':       self.command,
-            'is_tested':     self.is_tested,
-            'is_preset':     self.is_preset
-        }

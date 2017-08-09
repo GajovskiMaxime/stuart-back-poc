@@ -23,7 +23,6 @@ def test():
     tests = unittest.TestLoader().discover(
         get_folder_path_from_root_project('tests'),
         pattern='test*.py')
-    current_app.logger.info(tests)
     result = unittest.TextTestRunner(verbosity=2).run(tests)
     if result.wasSuccessful():
         return 0

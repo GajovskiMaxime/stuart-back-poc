@@ -18,18 +18,28 @@ class ModuleProperties(AbstractModelProperties):
                 'sql': {
                     'type_': String,
                     'nullable': False
+                },
+                'json': {
+                    'expected_type': 'field'
                 }
             },
             'command': {
                 'sql': {
                     'type_': String,
                     'nullable': False
-                }},
+                },
+                'json': {
+                    'expected_type': 'field'
+                }
+            },
             'is_preset': {
                 'sql': {
                     'type_': Boolean,
                     'nullable': False,
                     'default': False
+                },
+                'json': {
+                    'expected_type': 'field'
                 }
             },
         },
@@ -43,4 +53,5 @@ class ModuleProperties(AbstractModelProperties):
     }
 
     def __init__(self):
-        super(ModuleProperties, self).__init__(self.__properties)
+        super(ModuleProperties, self).__init__(
+            self.__properties)
