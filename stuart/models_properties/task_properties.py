@@ -27,7 +27,7 @@ class TaskProperties(AbstractModelProperties):
             'custom_label': {
                 'sql': {
                     'type_': String,
-                    'nullable': False
+                    'nullable': True
                 },
                 'json': {
                     'expected_type': 'field'
@@ -39,7 +39,7 @@ class TaskProperties(AbstractModelProperties):
                     'nullable': False
                 },
                 'json': {
-                    'expected_type': 'object'
+                    'expected_type': 'json_object'
                 }
             },
             'created_at': {

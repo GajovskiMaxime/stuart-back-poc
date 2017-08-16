@@ -21,7 +21,7 @@ unix;Archive utility;an archiving utility;tar
 unix;Search files;print lines matching a pattern;grep
 unix;File location;search for files in a directory hierarchy;find
 unix;List dir.;list directory contents ;ls
-unix;File display;concatenate files and print on the standard output;
+unix;File display;concatenate files and print on the standard output;cat
 unix;Manual use;You can do whatever you want with this command; 
 unix;Create;Create a file;touch
 unix;Create;Create a directory;mkdir

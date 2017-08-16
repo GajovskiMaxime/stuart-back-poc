@@ -11,6 +11,7 @@ from stuart.exceptions.database.database_exception import DatabaseException
 from stuart.exceptions.database.unique_constraint_exception import UniqueConstraintException
 from stuart.exceptions.json.double_quote_enclosure_exception import DoubleQuoteEnclosureException
 from stuart.exceptions.json.malformed_json_exception import MalformedJSONObjectException
+from stuart.exceptions.json.missing_object_on_json_request import MissingObjectOnJSONRequest
 
 
 class ModelVerifier(object):
@@ -54,7 +55,10 @@ class ModelVerifier(object):
                 json_type = self._table.properties().get_json_attr_column(k)['expected_type']
                 if json_type == 'json_string':
                     try:
-                        json.loads(v)
+                        if not isinstance(v, dict):
+                            raise MissingObjectOnJSONRequest(
+                                requested_object_name=k)
+                        args[k] = str(v)
                     except JSONDecodeError as json_err:
                         if 'Expecting value' in json_err.args[0]:
                             raise MalformedJSONObjectException(
@@ -77,7 +81,10 @@ class ModelVerifier(object):
                         except DatabaseException:
                             raise
 
-                    elif json_type == 'object':
+                    elif json_type == 'json_object':
+                        if not isinstance(v, dict):
+                            raise MissingObjectOnJSONRequest(
+                                requested_object_name=k)
                         created_object = service.create_with_recursion(
                             args=v,
                             session=session,

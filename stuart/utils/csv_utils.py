@@ -22,6 +22,8 @@ def load_data(file_name):
     return data.tolist()
 
 
+# TODO : Need refacto. for csv_to_sql methods.
+# TODO : Not important atm.
 def module_csv_to_sql():
 
     with create_app().app_context():

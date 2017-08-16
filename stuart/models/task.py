@@ -39,7 +39,7 @@ class Task(db.Model, AbstractModel):
 
     UniqueConstraint(action, task_params)
 
-    def __init__(self, custom_label, action, task_params):
+    def __init__(self, action, task_params, custom_label=""):
         super().__init__()
         self.custom_label = custom_label
         self.action = action

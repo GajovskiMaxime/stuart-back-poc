@@ -19,7 +19,7 @@ class TaskParamsProperties(AbstractModelProperties):
                     'nullable': False
                 },
                 'json': {
-                    'expected_type': 'object'
+                    'expected_type': 'json_object'
                 }
             },
             'params_dictionaries': {
@@ -28,7 +28,7 @@ class TaskParamsProperties(AbstractModelProperties):
                     'nullable': False
                 },
                 'json': {
-                    'expected_type': 'object'
+                    'expected_type': 'json_object'
                 }
             },
         },

@@ -30,7 +30,7 @@ class UserTaskProperties(AbstractModelProperties):
                     'nullable': False
                 },
                 'json': {
-                    'expected_type': 'object'
+                    'expected_type': 'json_object'
                 }
             },
             'created_at': {

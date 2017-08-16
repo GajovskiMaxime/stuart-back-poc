@@ -1,8 +1,11 @@
 from flask import current_app
 from sqlalchemy import Integer, String, Boolean
+from sqlalchemy.exc import OperationalError
+
 from stuart.exceptions.database.filter_exception import FilterException
 from stuart.exceptions.database.object_not_found_exception import ObjectNotFoundException
 from stuart.exceptions.database.preset_exception import PresetException
+from stuart.exceptions.database.table_not_found_exception import TableNotFoundException
 
 
 class GenericDAO(object):
@@ -31,10 +34,17 @@ class GenericDAO(object):
                         query = query.filter(self._table.__getattribute__(self._table, k) == str(v))
                 if self._table.properties().get_sql_attr_column(k)['type_'] is Integer:
                     query = query.filter(self._table.__getattribute__(self._table, k) == int(v))
+
+            return query.all()
+
         except (ValueError, KeyError):
             raise FilterException(
                 filters=filters)
-        return query.all()
+        except OperationalError as err:
+            if 'no such table' in err.args[0]:
+                raise TableNotFoundException(
+                    table=self.table)
+            raise
 
     def read(self, session, filters, mode):
         try:
