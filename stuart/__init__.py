@@ -16,12 +16,13 @@ def create_app():
     from stuart.models.generic_params_patterns import GenericParamsPatterns
     from stuart.models.params_dictionary import ParamsDictionaries
     from stuart.api_routes.user_task_routes import UserTaskRoutes
+    from stuart.api_routes.task_event_routes import TaskEventRoutes
 
     app.register_blueprint(ModuleRoutes.module_blueprint)
     app.register_blueprint(ActionRoutes.action_blueprint)
     app.register_blueprint(TaskRoutes.task_blueprint)
     app.register_blueprint(UserTaskRoutes.user_task_blueprint)
-
+    app.register_blueprint(TaskEventRoutes.task_events_blueprint)
 
     CORS(app)
     db.init_app(app)

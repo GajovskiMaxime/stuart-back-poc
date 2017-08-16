@@ -11,8 +11,8 @@ from stuart.exceptions.database.unique_constraint_exception import UniqueConstra
 class GenericService(object):
 
     def __init__(self, dao, verifier):
-        self._dao = dao
-        self._verifier = verifier
+        self._dao = dao()
+        self._verifier = verifier()
 
     @property
     def dao(self):

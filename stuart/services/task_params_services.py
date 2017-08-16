@@ -4,9 +4,15 @@ from stuart.verifiers.task_params_verifier import TaskParamsVerifier
 
 
 class TaskParamsService(GenericService):
-
+    """
+        Task Params Service class.
+        -----------------
+        :extends: GenericService
+        :dao: TaskParamsDAO
+        :verifier: TaskParamsVerifier
+    """
     def __init__(self):
         super(TaskParamsService, self).__init__(
-            dao=TaskParamsDAO(),
-            verifier=TaskParamsVerifier())
+            dao=TaskParamsDAO,
+            verifier=TaskParamsVerifier)
 

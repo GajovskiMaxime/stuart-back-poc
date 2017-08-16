@@ -1,0 +1,32 @@
+module_name;category;label;command
+git;Manual use;Use git like you want;
+git;Remote;Manage set of tracked repositories;remote
+git;Settings;Get and set repository or global options;config
+git;Create;Clone a repository into a new directory;clone
+git;Create;Create an empty Git repository or reinitialize an existing one;init
+git;Help;Display help information about Git;help
+git;Local changes;Show the working tree status;status
+git;Local changes;Show various types of objects;show
+git;Local changes;Show changes between commits, commit and working tree, etc;diff
+git;Local changes;Add file contents to the index;add
+git;Local changes;Record changes to the repository;commit
+git;Commit history;Show commit logs;log
+git;Commit history;Show what revision and author last modified each line of a file;blame
+git;Branches & Tags;List, create, or delete branches;branch
+git;Branches & Tags;Switch branches or restore working tree files;checkout
+git;Branches & Tags;Create, list, delete or verify a tag object signed with GPG;tag
+git;Merge & Rebase;Reapply commits on top of another base tip;rebase
+git;Merge & Rebase;Join two or more development histories together;merge
+unix;Archive utility;an archiving utility;tar
+unix;Search files;print lines matching a pattern;grep
+unix;File location;search for files in a directory hierarchy;find
+unix;List dir.;list directory contents ;ls
+unix;File display;concatenate files and print on the standard output;
+unix;Manual use;You can do whatever you want with this command; 
+unix;Create;Create a file;touch
+unix;Create;Create a directory;mkdir
+salt;Test;Test connectivity on the target;test.ping
+salt;SaltUtil;Clear the cache on the target;saltutil.clear_cache
+salt;SaltUtil;Refresh the pillar;saltutil.refresh_pillar
+salt;SaltUtil;Synchronise the minions;saltutil.sync_all
+salt;State;Launch a state.highstate on the target;state.highstate

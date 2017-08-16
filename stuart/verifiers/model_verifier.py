@@ -1,7 +1,7 @@
 import sys
 from simplejson import JSONDecodeError
 
-from flask import json
+from flask import json, current_app
 from sqlalchemy import String
 
 from stuart.exceptions.attribute.attribute_exception import AttributeException

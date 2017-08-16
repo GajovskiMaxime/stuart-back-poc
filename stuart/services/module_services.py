@@ -4,8 +4,14 @@ from stuart.verifiers.module_verifier import ModuleVerifier
 
 
 class ModuleService(GenericService):
-
+    """
+        Module Service class.
+        -----------------
+        :extends: GenericService
+        :dao: ModuleDAO
+        :verifier: ModuleVerifier
+    """
     def __init__(self):
         super(ModuleService, self).__init__(
-            dao=ModuleDAO(),
-            verifier=ModuleVerifier())
+            dao=ModuleDAO,
+            verifier=ModuleVerifier)

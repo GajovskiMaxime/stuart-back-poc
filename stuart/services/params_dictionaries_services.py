@@ -4,8 +4,14 @@ from stuart.verifiers.params_dictionaries_verifier import ParamsDictionariesVeri
 
 
 class ParamsDictionariesService(GenericService):
-
+    """
+        Params Dictionaries Service class.
+        -----------------
+        :extends: GenericService
+        :dao: ParamsDictionariesDAO
+        :verifier: ParamsDictionariesVerifier
+    """
     def __init__(self):
         super(ParamsDictionariesService, self).__init__(
-            dao=ParamsDictionariesDAO(),
-            verifier=ParamsDictionariesVerifier())
+            dao=ParamsDictionariesDAO,
+            verifier=ParamsDictionariesVerifier)

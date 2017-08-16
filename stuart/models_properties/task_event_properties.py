@@ -1,9 +1,11 @@
-from sqlalchemy import Integer, String, Boolean
+from datetime import datetime
+
+from sqlalchemy import Integer, DateTime, String
 
 from stuart.models_properties.abstract_model_properties import AbstractModelProperties
 
 
-class ActionProperties(AbstractModelProperties):
+class TaskEventProperties(AbstractModelProperties):
 
     __properties = {
         'columns': {
@@ -13,7 +15,7 @@ class ActionProperties(AbstractModelProperties):
                     'primary_key': True
                 }
             },
-            'module': {
+            'user_task': {
                 'sql': {
                     'type_': Integer,
                     'nullable': False
@@ -22,7 +24,26 @@ class ActionProperties(AbstractModelProperties):
                     'expected_type': 'id'
                 }
             },
-            'category': {
+            'begin': {
+                'sql': {
+                    'type_': DateTime,
+                    'nullable': False,
+                    'default': datetime.now()
+                },
+                'json': {
+                    'expected_type': 'field'
+                }
+            },
+            "end": {
+                'sql': {
+                    'type_': DateTime,
+                    'nullable': True
+                },
+                'json': {
+                    'expected_type': 'field'
+                }
+            },
+            "status": {
                 'sql': {
                     'type_': String,
                     'nullable': True
@@ -30,53 +51,17 @@ class ActionProperties(AbstractModelProperties):
                 'json': {
                     'expected_type': 'field'
                 }
-            },
-            'label': {
-                'sql': {
-                    'type_': String,
-                    'nullable': False
-                },
-                'json': {
-                    'expected_type': 'field'
-                }
-            },
-            'command': {
-                'sql': {
-                    'type_': String,
-                    'nullable': False
-                },
-                'json': {
-                    'expected_type': 'field'
-                }
-            },
-            'is_tested': {
-                'sql': {
-                    'type_': Boolean,
-                    'nullable': True,
-                    'default': False
-                },
-                'json': {
-                    'expected_type': 'field'
-                }
-            },
-            'is_preset': {
-                'sql': {
-                    'type_': Boolean,
-                    'nullable': False,
-                    'default': False
-                },
-                'json': {
-                    'expected_type': 'field'
-                }
             }
         },
         'relationships': {
-            'module': {
-                'argument': 'Module'
+            'user_task': {
+                'argument': 'UserTask',
+                'lazy': 'subquery',
+                'cascade': 'save-update, merge, delete'
             }
         }
     }
 
     def __init__(self):
-        super(ActionProperties, self).__init__(
+        super(TaskEventProperties, self).__init__(
             self.__properties)

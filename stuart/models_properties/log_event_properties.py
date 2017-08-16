@@ -1,9 +1,10 @@
-from sqlalchemy import Integer, String, Boolean
+
+from sqlalchemy import Integer, String
 
 from stuart.models_properties.abstract_model_properties import AbstractModelProperties
 
 
-class ActionProperties(AbstractModelProperties):
+class LogEventProperties(AbstractModelProperties):
 
     __properties = {
         'columns': {
@@ -13,7 +14,7 @@ class ActionProperties(AbstractModelProperties):
                     'primary_key': True
                 }
             },
-            'module': {
+            'task_event': {
                 'sql': {
                     'type_': Integer,
                     'nullable': False
@@ -22,7 +23,7 @@ class ActionProperties(AbstractModelProperties):
                     'expected_type': 'id'
                 }
             },
-            'category': {
+            'status_code': {
                 'sql': {
                     'type_': String,
                     'nullable': True
@@ -31,39 +32,19 @@ class ActionProperties(AbstractModelProperties):
                     'expected_type': 'field'
                 }
             },
-            'label': {
+            "stdout": {
                 'sql': {
                     'type_': String,
-                    'nullable': False
+                    'nullable': True
                 },
                 'json': {
                     'expected_type': 'field'
                 }
             },
-            'command': {
+            "stderr": {
                 'sql': {
                     'type_': String,
-                    'nullable': False
-                },
-                'json': {
-                    'expected_type': 'field'
-                }
-            },
-            'is_tested': {
-                'sql': {
-                    'type_': Boolean,
-                    'nullable': True,
-                    'default': False
-                },
-                'json': {
-                    'expected_type': 'field'
-                }
-            },
-            'is_preset': {
-                'sql': {
-                    'type_': Boolean,
-                    'nullable': False,
-                    'default': False
+                    'nullable': True
                 },
                 'json': {
                     'expected_type': 'field'
@@ -71,12 +52,14 @@ class ActionProperties(AbstractModelProperties):
             }
         },
         'relationships': {
-            'module': {
-                'argument': 'Module'
+            'task_event': {
+                'argument': 'TaskEvent',
+                'lazy': 'subquery',
+                'cascade': 'save-update, merge, delete'
             }
         }
     }
 
     def __init__(self):
-        super(ActionProperties, self).__init__(
+        super(LogEventProperties, self).__init__(
             self.__properties)

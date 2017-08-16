@@ -1,16 +1,14 @@
 from flask import current_app
 from sqlalchemy import Integer, String, Boolean
-
-from stuart.exceptions.database.empty_table_exception import EmptyTableException
 from stuart.exceptions.database.filter_exception import FilterException
 from stuart.exceptions.database.object_not_found_exception import ObjectNotFoundException
 from stuart.exceptions.database.preset_exception import PresetException
 
 
-class AbstractGenericDAO(object):
+class GenericDAO(object):
 
     def __init__(self, table):
-        super(AbstractGenericDAO, self).__init__()
+        super(GenericDAO, self).__init__()
         self._table = table
 
     def create(self, session, args):
@@ -25,7 +23,6 @@ class AbstractGenericDAO(object):
                 if v is None:
                     query = query.filter(self._table.__getattribute__(self._table, k).is_(None))
                 elif self._table.properties().get_sql_attr_column(k)['type_'] is Boolean:
-                    v = True if v.lower() == 'true' else False
                     query = query.filter(self._table.__getattribute__(self._table, k).is_(v))
                 elif self._table.properties().get_sql_attr_column(k)['type_'] is String:
                     if mode == 'contains':

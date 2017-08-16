@@ -7,7 +7,3 @@ class TaskParamsVerifier(ModelVerifier):
     def __init__(self):
         super(TaskParamsVerifier, self).__init__(
             table=TaskParams)
-
-    def verify(self, **args):
-        return super(TaskParamsVerifier, self).\
-            verify(**args)
