@@ -33,7 +33,11 @@ class Task(db.Model, AbstractModel):
 
     # --------- Relationships ---------
 
-    task_params_relation = db.relationship(**_properties.get_relation('task_params'))
+    task_params_relation = db.relationship(
+        **_properties.get_relation('task_params'))
+
+    action_relation = db.relationship(
+        **_properties.get_relation('action'))
 
     # --------- Constraints ---------
 

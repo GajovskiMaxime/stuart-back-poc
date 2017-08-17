@@ -1,9 +1,14 @@
-from stuart.api_core.abstract_core_api import AbstractCoreAPI
+from stuart.api_core.generic_core_api import GenericCoreAPI
 from stuart.services.module_services import ModuleService
 
 
-class ModuleCoreAPI(AbstractCoreAPI):
-
+class ModuleCoreAPI(GenericCoreAPI):
+    """
+          Module Core API class.
+          -----------------
+          :extends: GenericCoreAPI
+          :service: ModuleService
+      """
     def __init__(self):
-        super(ModuleCoreAPI, self).__init__(
-            service=ModuleService())
+        super(ModuleCoreAPI, self).\
+            __init__(service=ModuleService)

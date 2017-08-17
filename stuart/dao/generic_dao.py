@@ -1,4 +1,3 @@
-from flask import current_app
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.exc import OperationalError
 
@@ -34,7 +33,6 @@ class GenericDAO(object):
                         query = query.filter(self._table.__getattribute__(self._table, k) == str(v))
                 if self._table.properties().get_sql_attr_column(k)['type_'] is Integer:
                     query = query.filter(self._table.__getattribute__(self._table, k) == int(v))
-
             return query.all()
 
         except (ValueError, KeyError):

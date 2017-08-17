@@ -7,10 +7,10 @@ from stuart.utils.json_utils import get_object_from_request, get_success_respons
     object_to_json_with_lazy_attr
 
 
-class AbstractCoreAPI(object):
+class GenericCoreAPI(object):
 
     def __init__(self, service):
-        self._service = service
+        self._service = service()
 
     def read(self, filters):
         insensitive_filter_list = get_insensitive_filters_list(

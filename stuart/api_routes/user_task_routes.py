@@ -37,3 +37,11 @@ class UserTaskRoutes(object):
         dictionary['id'] = user_task_id
         return UserTaskCoreAPI().delete(
             filters=dictionary)
+
+    @staticmethod
+    @user_task_blueprint.route('/<string:user_task_id>/execute', methods=['GET'])
+    def execute(user_task_id):
+        dictionary = request.args.to_dict()
+        dictionary['id'] = user_task_id
+        return UserTaskCoreAPI().execute(
+            filters=dictionary)

@@ -58,7 +58,7 @@ class ModelVerifier(object):
                         if not isinstance(v, dict):
                             raise MissingObjectOnJSONRequest(
                                 requested_object_name=k)
-                        args[k] = str(v)
+                        args[k] = json.dumps(v)
                     except JSONDecodeError as json_err:
                         if 'Expecting value' in json_err.args[0]:
                             raise MalformedJSONObjectException(
