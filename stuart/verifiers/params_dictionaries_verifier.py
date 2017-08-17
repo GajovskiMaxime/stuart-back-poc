@@ -3,11 +3,12 @@ from stuart.verifiers.model_verifier import ModelVerifier
 
 
 class ParamsDictionariesVerifier(ModelVerifier):
-
+    """
+        Params Dictionaries Verifier class.
+        -----------------
+        :extends: ModelVerifier
+        :table: ParamsDictionaries
+    """
     def __init__(self):
-        super(ParamsDictionariesVerifier, self).__init__(
-            table=ParamsDictionaries)
-
-    def verify(self, **args):
-        return super(ParamsDictionariesVerifier, self).\
-            verify(**args)
+        super(ParamsDictionariesVerifier, self).\
+            __init__(table=ParamsDictionaries)
